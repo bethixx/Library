@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Library.Models.Book>
+
+@{
+    ViewData["Title"] = "Books";
+}
+
+<h1>Books</h1>
+
+<form method="get">
+    <input type="text" name="searchString" placeholder="Search by title..." value="@Context.Request.Query["searchString"]" />
+    <select name="authorId" class="form-control">
+        <option value="">-- All authors --</option>
+        @foreach (var a in (ViewData["Authors"] as SelectList) ?? new SelectList(new List<object>()))
+        {
+            <option value="@a.Value">@a.Text</option>
+        }
+    </select>
+    <button type="submit">Search</button>
+</form>
+
+<p>
+    <a asp-action="Create">Create New Book</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Author?.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
